@@ -139,6 +139,10 @@ void update(World& world, float elapsedTimeInSeconds)
         }
     }
 
+    for (auto& ball : world.balls) {
+        ball.position += ball.velocity * elapsedTimeInSeconds;
+    }
+
     for (auto ball = world.balls.begin(); ball != world.balls.end(); ++ball) {
         for (auto other = std::next(ball); other != world.balls.end(); ++other) {
             if (areColliding(*ball, *other)) {
@@ -153,8 +157,6 @@ void update(World& world, float elapsedTimeInSeconds)
     separate(world.balls.begin(), world.balls.end());
 
     for (auto& ball : world.balls) {
-        ball.position += ball.velocity * elapsedTimeInSeconds;
-
         if (ball.position.x - ball.radius <= 0.f) {
             ball.position.x = ball.radius;
             ball.velocity.x = std::abs(ball.velocity.x);
