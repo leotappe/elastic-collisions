@@ -2,6 +2,7 @@
 #define ELASTIC_COLLISIONS_WORLD_H
 
 #include "raylib.h"
+#include <optional>
 #include <vector>
 
 struct Ball {
@@ -21,7 +22,6 @@ struct World {
     explicit World(float width, float height)
         : limits { width, height }
     {
-        balls.emplace_back(Vector2 { width / 2.f, height / 2.f }, 16.f, YELLOW);
     }
 
     Vector2 limits;
