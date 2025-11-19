@@ -24,7 +24,7 @@ For the desktop presets (`release` and `debug`) this should produce an executabl
 For example, on linux, you should be able to run
 
 ```bash
-./build/release/demo/demo
+./build/release/elastic-collisions/elastic-collisions
 ```
 
 For the web presets (`web-release` and `debug`), the produced `.wasm` is not directly executable.
@@ -32,5 +32,5 @@ Instead, there should be an `index.html` in the build directory that you can ser
 For example, on linux with `emrun`:
 
 ```bash
-emrun build/web-release/demo/index.html
+emrun build/web-release/elastic-collisions/index.html
 ```

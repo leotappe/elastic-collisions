@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.24) # CMP0135
 
-project(demo)
+project(elastic-collisions)
 
 include(FetchContent)
 
@@ -11,4 +11,4 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(raylib)
 
-add_subdirectory(demo)
+add_subdirectory(elastic-collisions)
