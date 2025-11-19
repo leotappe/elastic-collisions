@@ -7,7 +7,8 @@
 #include <ranges>
 
 namespace {
-static std::mt19937 generator;
+static std::random_device seeder;
+static std::mt19937 generator(seeder());
 
 template <typename IntType>
 IntType createUniformlyDistributedInt(IntType lower, IntType upper)
