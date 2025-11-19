@@ -77,6 +77,55 @@ std::optional<Ball> createRandomNonOverlappingBall(const World& world)
 
     return std::nullopt;
 }
+
+float computeCircleArea(float radius)
+{
+    return std::numbers::pi_v<float> * radius * radius;
+}
+
+float computeMass(const Ball& ball)
+{
+    return computeCircleArea(ball.radius);
+}
+
+Vector2 computeNewVelocityOfLhsAfterElasticCollision(const Ball& lhs, const Ball& rhs)
+{
+    const auto m1 = computeMass(lhs);
+    const auto m2 = computeMass(rhs);
+    const auto positionDelta = lhs.position - rhs.position;
+    const auto velocityDelta = lhs.velocity - rhs.velocity;
+    const auto factor = (2 * m2) / (m1 + m2) * Vector2DotProduct(velocityDelta, positionDelta) / Vector2LengthSqr(positionDelta);
+
+    return lhs.velocity - positionDelta * factor;
+}
+
+void pushApart(Ball& lhs, Ball& rhs)
+{
+    const auto displacement = Vector2Normalize(lhs.position - rhs.position) * 0.5f;
+    lhs.position += displacement;
+    rhs.position -= displacement;
+}
+
+template <typename BallIterator>
+void separate(BallIterator begin, BallIterator end)
+{
+    while (true) {
+        auto change = false;
+
+        for (auto lhs = begin; lhs != end; ++lhs) {
+            for (auto rhs = std::next(lhs); rhs != end; ++rhs) {
+                while (areColliding(*lhs, *rhs)) {
+                    pushApart(*lhs, *rhs);
+                    change = true;
+                }
+            }
+        }
+
+        if (!change) {
+            break;
+        }
+    }
+}
 }
 
 void update(World& world, float elapsedTimeInSeconds)
@@ -87,6 +136,19 @@ void update(World& world, float elapsedTimeInSeconds)
             world.balls.push_back(*randomBall);
         }
     }
+
+    for (auto ball = world.balls.begin(); ball != world.balls.end(); ++ball) {
+        for (auto other = std::next(ball); other != world.balls.end(); ++other) {
+            if (areColliding(*ball, *other)) {
+                const auto newVelocityBall = computeNewVelocityOfLhsAfterElasticCollision(*ball, *other);
+                const auto newVelocityOther = computeNewVelocityOfLhsAfterElasticCollision(*other, *ball);
+                ball->velocity = newVelocityBall;
+                other->velocity = newVelocityOther;
+            }
+        }
+    }
+
+    separate(world.balls.begin(), world.balls.end());
 
     for (auto& ball : world.balls) {
         ball.position += ball.velocity * elapsedTimeInSeconds;
