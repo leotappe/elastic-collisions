@@ -1,6 +1,6 @@
 add_executable(elastic-collisions)
 
-target_sources(elastic-collisions PRIVATE main.cpp)
+target_sources(elastic-collisions PRIVATE main.cpp world.cpp draw.cpp)
 target_compile_features(elastic-collisions PRIVATE cxx_std_23)
 set_target_properties(elastic-collisions PROPERTIES CXX_EXTENSIONS OFF)
 
