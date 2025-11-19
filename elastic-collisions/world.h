@@ -6,14 +6,16 @@
 #include <vector>
 
 struct Ball {
-    explicit Ball(Vector2 position, float radius, Color color)
+    explicit Ball(Vector2 position, Vector2 velocity, float radius, Color color)
         : position(position)
+        , velocity(velocity)
         , radius(radius)
         , color(color)
     {
     }
 
     Vector2 position;
+    Vector2 velocity;
     float radius;
     Color color;
 };

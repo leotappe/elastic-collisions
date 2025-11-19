@@ -26,6 +26,12 @@ Vector2 createRandomPositionForBallWithRadius(float radius, const Vector2& limit
     return { createUniformlyDistributedReal(radius, limits.x - radius), createUniformlyDistributedReal(radius, limits.y - radius) };
 }
 
+Vector2 createRandomDirection()
+{
+    const auto angle = createUniformlyDistributedReal(0.f, 2 * std::numbers::pi_v<float>);
+    return { std::cos(angle), std::sin(angle) };
+}
+
 Color createRandomColor()
 {
     const auto r = static_cast<unsigned char>(createUniformlyDistributedInt(0, 255));
@@ -41,9 +47,14 @@ Ball createRandomBall(const World& world)
 
     const auto radius = createUniformlyDistributedReal(minRadius, maxRadius);
     const auto position = createRandomPositionForBallWithRadius(radius, world.limits);
+
+    constexpr float minSpeed = 32.f;
+    constexpr float maxSpeed = 256.f;
+
+    const auto velocity = createRandomDirection() * createUniformlyDistributedReal(minSpeed, maxSpeed);
     const auto color = createRandomColor();
 
-    return Ball { position, radius, color };
+    return Ball { position, velocity, radius, color };
 }
 
 bool areColliding(const Ball& lhs, const Ball& rhs)
@@ -68,12 +79,33 @@ std::optional<Ball> createRandomNonOverlappingBall(const World& world)
 }
 }
 
-void update(World& world, float)
+void update(World& world, float elapsedTimeInSeconds)
 {
     if (IsKeyPressed(KEY_ENTER) || IsMouseButtonPressed(MOUSE_BUTTON_LEFT) || IsGestureDetected(GESTURE_TAP)) {
         const auto randomBall = createRandomNonOverlappingBall(world);
         if (randomBall.has_value()) {
             world.balls.push_back(*randomBall);
+        }
+    }
+
+    for (auto& ball : world.balls) {
+        ball.position += ball.velocity * elapsedTimeInSeconds;
+
+        if (ball.position.x - ball.radius <= 0.f) {
+            ball.position.x = ball.radius;
+            ball.velocity.x = std::abs(ball.velocity.x);
+        }
+        if (ball.position.x + ball.radius >= world.limits.x) {
+            ball.position.x = world.limits.x - ball.radius;
+            ball.velocity.x = -std::abs(ball.velocity.x);
+        }
+        if (ball.position.y - ball.radius <= 0.f) {
+            ball.position.y = ball.radius;
+            ball.velocity.y = std::abs(ball.velocity.y);
+        }
+        if (ball.position.y + ball.radius >= world.limits.y) {
+            ball.position.y = world.limits.y - ball.radius;
+            ball.velocity.y = -std::abs(ball.velocity.y);
         }
     }
 }
