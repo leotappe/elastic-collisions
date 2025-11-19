@@ -5,6 +5,7 @@
 #include <numbers>
 #include <random>
 #include <ranges>
+#include <optional>
 
 namespace {
 static std::random_device seeder;

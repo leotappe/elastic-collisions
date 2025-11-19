@@ -2,7 +2,6 @@
 #define ELASTIC_COLLISIONS_WORLD_H
 
 #include "raylib.h"
-#include <optional>
 #include <vector>
 
 struct Ball {
