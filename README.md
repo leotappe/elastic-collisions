@@ -1,7 +1,7 @@
 # Elastic Collisions
 
 A simple simulation of [elastic collisions](https://en.wikipedia.org/wiki/Elastic_collision) in 2D, built with C++ and [raylib](https://www.raylib.com/).
-You can check it out [live on the web](https://leotappe.github.io/elastic-collisions/) thanks to [WebAssembly](https://de.wikipedia.org/wiki/WebAssembly).
+You can check it out [live on the web](https://leotappe.github.io/elastic-collisions/) thanks to [WebAssembly](https://en.wikipedia.org/wiki/WebAssembly).
 
 ![screenshot](assets/screenshot.png)
 
